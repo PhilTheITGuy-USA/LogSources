@@ -34,7 +34,7 @@ first template lacked. That export does not vouch for filter `op: "In"`, a `LogN
 | `resourceMapping` (`Token` `##system.deviceId##`, index `"0"`) survives | portal import | pass | 2026-11-13 |
 | Top-level key set unchanged by the round trip | portal import | pass | 2026-11-13 |
 | Round trip: the export equals the build in every field except `version` (added) and `registryMetadata` (filled with the portal's own ids, `authorCompanyUuid` left blank) | portal import | pass | 2026-11-13 |
-| Group add/remove events reach LM Logs mapped to the DC, with `ad_event_category = group_management` | live target | pending | |
+| Group events reach LM Logs mapped to the DC, with `ad_event_category = group_management`, distinct `event_id`s; no other Security events get in | live target | pass | 2026-11-13 |
 
 ## Deferred
 
