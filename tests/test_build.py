@@ -24,19 +24,16 @@ TEMPLATE = json.loads((SET_DIR / "Microsoft_AD_GroupManagement_Events.json").rea
 
 
 def _clone(module):
-    return types.SimpleNamespace(
-        SECURITY_GROUP_EVENTS=dict(module.SECURITY_GROUP_EVENTS),
-        DISTRIBUTION_GROUP_EVENTS=dict(module.DISTRIBUTION_GROUP_EVENTS),
-    )
+    return types.SimpleNamespace(SECURITY_GROUP_EVENTS=dict(module.SECURITY_GROUP_EVENTS))
 
 
 class EventIds(unittest.TestCase):
-    def test_31_sorted_with_4764_without_4736(self):
+    def test_16_security_group_ids_sorted(self):
+        # Security groups only; the 15 distribution-group IDs were dropped (user, 2026-11-13).
         ids = build.event_ids(events)
-        self.assertEqual(len(ids), 31)
-        self.assertEqual(ids, sorted(ids))
-        self.assertIn(4764, ids)
-        self.assertNotIn(4736, ids)
+        self.assertEqual(ids, [4727, 4728, 4729, 4730, 4731, 4732, 4733, 4734, 4735, 4737,
+                               4754, 4755, 4756, 4757, 4758, 4764])
+        self.assertFalse(hasattr(events, "DISTRIBUTION_GROUP_EVENTS"))
 
     def test_unapproved_id_fails(self):
         m = _clone(events)
@@ -44,26 +41,18 @@ class EventIds(unittest.TestCase):
         with self.assertRaises(build.BuildError):
             build.event_ids(m)
 
-    def test_overlap_fails(self):
-        m = _clone(events)
-        m.DISTRIBUTION_GROUP_EVENTS[4728] = "duplicate"
-        with self.assertRaises(build.BuildError):
-            build.event_ids(m)
-
     def test_missing_id_fails(self):
         m = _clone(events)
-        del m.DISTRIBUTION_GROUP_EVENTS[4763]
+        del m.SECURITY_GROUP_EVENTS[4764]
         with self.assertRaises(build.BuildError):
             build.event_ids(m)
 
 
 class EventTable(unittest.TestCase):
-    def test_grouped_lines(self):
-        table = build.event_table(events)
-        self.assertIn("Security groups:", table)
-        self.assertIn("Distribution groups:", table)
-        self.assertLess(table.index("Security groups:"), table.index("Distribution groups:"))
-        self.assertIn("4728  Global group: member added", table)
+    def test_one_line_per_event(self):
+        lines = build.event_table(events).splitlines()
+        self.assertEqual(len(lines), 16)
+        self.assertIn("4728  Global group: member added", lines)
 
 
 class RenderLogSource(unittest.TestCase):
@@ -83,7 +72,11 @@ class RenderLogSource(unittest.TestCase):
 
     def test_technical_notes_hold_table(self):
         self.assertIn("4728", self.out["technicalNotes"])
-        self.assertIn("Distribution groups:", self.out["technicalNotes"])
+        notes = self.out["technicalNotes"]
+        self.assertNotIn("Audit Distribution Group Management", notes)
+        for dropped in list(range(4744, 4754)) + list(range(4759, 4764)):
+            self.assertNotIn(str(dropped), notes)
+        self.assertNotIn("31", self.out["description"])
 
     def test_static_field(self):
         self.assertIn(

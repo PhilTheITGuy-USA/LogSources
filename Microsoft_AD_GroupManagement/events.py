@@ -1,4 +1,5 @@
-"""The AD group-management Security events this set ingests -- the single source.
+"""The AD security-group events this set ingests -- the single source. Distribution groups
+(4744-4753, 4759-4763) are left out: they grant no permissions (user, 2026-11-13).
 
 build/build.py writes these into the LogSource's EventId filter and its technicalNotes.
 """
@@ -23,21 +24,3 @@ SECURITY_GROUP_EVENTS = {
     4764: "Group type or scope changed",
 }
 
-# Produced by Audit Distribution Group Management.
-DISTRIBUTION_GROUP_EVENTS = {
-    4744: "Domain Local distribution group: created",
-    4745: "Domain Local distribution group: changed",
-    4746: "Domain Local distribution group: member added",
-    4747: "Domain Local distribution group: member removed",
-    4748: "Domain Local distribution group: deleted",
-    4749: "Global distribution group: created",
-    4750: "Global distribution group: changed",
-    4751: "Global distribution group: member added",
-    4752: "Global distribution group: member removed",
-    4753: "Global distribution group: deleted",
-    4759: "Universal distribution group: created",
-    4760: "Universal distribution group: changed",
-    4761: "Universal distribution group: member added",
-    4762: "Universal distribution group: member removed",
-    4763: "Universal distribution group: deleted",
-}

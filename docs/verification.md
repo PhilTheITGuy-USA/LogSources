@@ -15,7 +15,7 @@ first template lacked. That export does not vouch for filter `op: "In"`, a `LogN
 
 | Claim | Layer | Result | Date |
 |---|---|---|---|
-| Exactly the 31 approved event IDs, no 4736, no overlap between the groups | local (`tests/test_build.py`) | pass | 2026-11-13 |
+| Exactly the 16 security-group event IDs (distribution groups dropped, user 2026-11-13), no 4736 | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | The EventId filter and the technicalNotes table come from the same `events.py` | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | No placeholder survives the build; no `version`, `registryMetadata`, `integrationMetadata` or `originId` | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | Every key set (top level, `collectionAttrs`, filters, logFields, resourceMapping) matches the working export's, minus portal-owned keys | local (`tests/test_build.py`) | pass | 2026-11-13 |
@@ -27,7 +27,7 @@ first template lacked. That export does not vouch for filter `op: "In"`, a `LogN
 | One change at a time from a clone's export: renamed, empty AppliesTo, no `originId`, no `version`, no `integrationMetadata` each import; no `registryMetadata` is refused, code 1500 | portal import | pass | 2026-11-13 |
 | Import accepted with `registryMetadata`'s portal-specific fields blank | portal import | pending | |
 | `LogName` filter (`Equal` `Security`) survives | portal import | pending | |
-| `EventId` filter (`In`, 31 pipe-separated IDs) survives | portal import | pending | |
+| `EventId` filter (`In`, 16 pipe-separated IDs) survives | portal import | pending | |
 | `Static` log field `ad_event_category` survives | portal import | pending | |
 | `resourceMapping` (`Token` `##system.deviceId##`, index `"0"`) survives | portal import | pending | |
 | Top-level key set unchanged by the round trip | portal import | pending | |

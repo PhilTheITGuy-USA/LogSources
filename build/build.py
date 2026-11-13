@@ -13,9 +13,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
 
-# The 31 IDs in the design spec. events.py must match this set exactly; there is no event 4736.
+# The 16 security-group IDs. events.py must match this set exactly; there is no event 4736.
+# The design spec's 15 distribution-group IDs were dropped (user, 2026-11-13).
 APPROVED_EVENT_IDS = sorted(
-    list(range(4727, 4736)) + [4737] + list(range(4744, 4765))
+    list(range(4727, 4736)) + [4737] + list(range(4754, 4759)) + [4764]
 )
 
 
@@ -24,28 +25,17 @@ class BuildError(Exception):
 
 
 def event_ids(module):
-    sec = set(module.SECURITY_GROUP_EVENTS)
-    dist = set(module.DISTRIBUTION_GROUP_EVENTS)
-    overlap = sec & dist
-    if overlap:
-        raise BuildError(f"event IDs in both groups: {sorted(overlap)}")
-    ids = sorted(sec | dist)
+    ids = sorted(module.SECURITY_GROUP_EVENTS)
     if ids != APPROVED_EVENT_IDS:
         extra = sorted(set(ids) - set(APPROVED_EVENT_IDS))
         missing = sorted(set(APPROVED_EVENT_IDS) - set(ids))
-        raise BuildError(f"event IDs differ from the approved 31: extra {extra}, missing {missing}")
+        raise BuildError(f"event IDs differ from the approved 16: extra {extra}, missing {missing}")
     return ids
 
 
 def event_table(module):
-    lines = []
-    for title, events in (("Security groups:", module.SECURITY_GROUP_EVENTS),
-                          ("Distribution groups:", module.DISTRIBUTION_GROUP_EVENTS)):
-        if lines:
-            lines.append("")
-        lines.append(title)
-        lines.extend(f"{i}  {events[i]}" for i in sorted(events))
-    return "\n".join(lines)
+    events = module.SECURITY_GROUP_EVENTS
+    return "\n".join(f"{i}  {events[i]}" for i in sorted(events))
 
 
 def render_logsource(template, module):
