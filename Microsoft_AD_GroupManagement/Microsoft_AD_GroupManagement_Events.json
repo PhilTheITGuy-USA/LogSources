@@ -27,5 +27,6 @@
     ],
     "resourceMapping": [
         {"index": "0", "method": "Token", "comment": "", "value": "##system.deviceId##", "key": "system.deviceId"}
-    ]
+    ],
+    "registryMetadata": {}
 }

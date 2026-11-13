@@ -25,7 +25,9 @@ first template lacked. That export does not vouch for filter `op: "In"`, a `LogN
 | A module built in the portal UI (a `Windows Event Logs` clone) exports and re-imports | portal import | pass | 2026-11-13 |
 | The UI offers `op` `In`, filter `LogName` and an AND/OR `filterOp` | portal UI | pass | 2026-11-13 |
 | One change at a time from a clone's export: renamed, empty AppliesTo, no `originId`, no `version`, no `integrationMetadata` each import; no `registryMetadata` is refused, code 1500 | portal import | pass | 2026-11-13 |
-| Import accepted with `registryMetadata`'s portal-specific fields blank | portal import | pending | |
+| From an editor-built LogSource: `registryMetadata` `{}`, blank `authorCompanyUuid`, fresh or blank ids each import as a new module; an existing module's `currentUuid` under a new name leaves that module alone | portal import | pass | 2026-11-13 |
+| This module (16 IDs, `In`, `LogName`, AND, `Static` field) with a full from-scratch `registryMetadata` imports | portal import | pass | 2026-11-13 |
+| This module as built (`registryMetadata` `{}`) imports | portal import | pending | |
 | `LogName` filter (`Equal` `Security`) survives | portal import | pending | |
 | `EventId` filter (`In`, 16 pipe-separated IDs) survives | portal import | pending | |
 | `Static` log field `ad_event_category` survives | portal import | pending | |

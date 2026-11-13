@@ -90,19 +90,22 @@ class RenderLogSource(unittest.TestCase):
         self.assertEqual(o["collectionAttrs"], {"resourceMappingOp": "OR", "useWrittenTime": False, "filterOp": "AND"})
         self.assertEqual(o["appliesTo"], "")  # empty: the user sets it (user, 2026-11-13)
         self.assertIn('hasCategory("MicrosoftDomainController")', o["technicalNotes"])
-        for k in ("version", "registryMetadata", "integrationMetadata", "originId"):
+        for k in ("version", "integrationMetadata", "originId"):
             self.assertNotIn(k, o)
 
+    def test_registry_metadata_present_and_empty(self):
+        # Without registryMetadata the portal refuses the import, code 1500; an empty object
+        # imports, and carries nothing of the exporting portal [portal, 2026-11-13].
+        self.assertEqual(self.out["registryMetadata"], {})
+
     def test_key_sets_match_a_working_export(self):
-        # Key sets of a lab-portal export of a Windows Event Logs clone that imports (2026-11-13),
-        # minus the portal-owned version, registryMetadata, integrationMetadata and originId.
-        # The first import, without searchKeywords, group and the filter/mapping comments,
-        # was refused with code 1500.
+        # Key sets of lab-portal exports that import (2026-11-13), minus the optional
+        # version, integrationMetadata and originId.
         o = self.out
         self.assertEqual(set(o), {
             "name", "description", "appliesTo", "technicalNotes", "searchKeywords", "group",
             "type", "collectionMethod", "collectionInterval", "collectionAttrs",
-            "filters", "logFields", "resourceMapping",
+            "filters", "logFields", "resourceMapping", "registryMetadata",
         })
         self.assertEqual(set(o["collectionAttrs"]), {"resourceMappingOp", "useWrittenTime", "filterOp"})
         for f in o["filters"]:
