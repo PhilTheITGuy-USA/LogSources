@@ -35,10 +35,3 @@ first template lacked. That export does not vouch for filter `op: "In"`, a `LogN
 | Top-level key set unchanged by the round trip | portal import | pass | 2026-11-13 |
 | Round trip: the export equals the build in every field except `version` (added) and `registryMetadata` (filled with the portal's own ids, `authorCompanyUuid` left blank) | portal import | pass | 2026-11-13 |
 | Group events reach LM Logs mapped to the DC, with `ad_event_category = group_management`, distinct `event_id`s; no other Security events get in | live target | pass | 2026-11-13 |
-
-## Deferred
-
-`Microsoft_AD_GroupManagement_AuditPolicy` (the DataSource that alerts when the audit policy is
-off) is designed in `docs/superpowers/specs/2026-11-12-ad-group-management-design.md` and not
-built (user, 2026-11-13). Finding kept for it: `auditpol /get ... /r` has no numeric Setting Value
-column, only localized text; `auditpol /backup /file:` has one (0 none, 1 Success, ...).
