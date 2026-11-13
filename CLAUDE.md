@@ -12,12 +12,19 @@ calling anything done, scrub lab data and run `python ../lab-scrub/check.py` bef
 feed portal lessons back into the skill. Lab names, addresses and portal details go in the
 gitignored `CLAUDE.local.md`.
 
-## Checks
+## Commands
 
 ```sh
-python ../logicmonitor-modules-skill/skill/scripts/lm_lint_module.py .
+python build/build.py                  # templates + events.py -> dist/<set>/ (gitignored)
+python -m unittest discover -s tests   # build cross-checks
+python ../logicmonitor-modules-skill/skill/scripts/lm_lint_module.py dist
 ```
 
-The lint recurses and skips non-module JSON. A clean lint is not a portal import. Record what each
-module has been verified against (local checks / portal import / live target) in one place in
-this repo once the first module lands.
+Rebuild before linting: the lint reads `dist/`. It recurses and skips non-module JSON. A LogSource
+gets the shared checks only, plus one expected `WARN` that says so.
+
+A set is a folder (`Microsoft_AD_GroupManagement/`) with `events.py` and JSON templates holding
+`@@EVENT_IDS@@` / `@@EVENT_TABLE@@`. Never edit `dist/`.
+
+A clean lint is not a portal import. `docs/verification.md` is the one record of what each module
+has been verified against (local checks / portal import / live target).

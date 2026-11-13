@@ -1,0 +1,31 @@
+# Verification
+
+What each module has been verified against, and by which layer: **local** (build, tests, lint),
+**portal import** (imported into a lab portal and exported again), **live target** (running against a
+real resource). This file is the one record of it. A clean lint is not a portal import.
+
+## `Microsoft_AD_GroupManagement_Events` (LogSource)
+
+The template's key set comes from the values the design spec recorded from LM's `Windows Event Logs`
+export. That export is not in this repo, so the portal round trip is what confirms the shape.
+
+| Claim | Layer | Result | Date |
+|---|---|---|---|
+| Exactly the 31 approved event IDs, no 4736, no overlap between the groups | local (`tests/test_build.py`) | pass | 2026-11-13 |
+| The EventId filter and the technicalNotes table come from the same `events.py` | local (`tests/test_build.py`) | pass | 2026-11-13 |
+| No placeholder survives the build; no `version`, `registryMetadata`, `integrationMetadata` or `originId` | local (`tests/test_build.py`) | pass | 2026-11-13 |
+| `lm_lint_module.py dist`: 0 errors (1 expected WARN: shared checks only for LogSources) | local | pass | 2026-11-13 |
+| Import accepted without `originId` | portal import | pending | |
+| `LogName` filter (`Equal` `Security`) survives | portal import | pending | |
+| `EventId` filter (`In`, 31 pipe-separated IDs) survives | portal import | pending | |
+| `Static` log field `ad_event_category` survives | portal import | pending | |
+| `resourceMapping` (`Token` `##system.deviceId##`, index `"0"`) survives | portal import | pending | |
+| Top-level key set unchanged by the round trip | portal import | pending | |
+| Group add/remove events reach LM Logs mapped to the DC, with `ad_event_category = group_management` | live target | pending | |
+
+## Deferred
+
+`Microsoft_AD_GroupManagement_AuditPolicy` (the DataSource that alerts when the audit policy is
+off) is designed in `docs/superpowers/specs/2026-11-12-ad-group-management-design.md` and not
+built (user, 2026-11-13). Finding kept for it: `auditpol /get ... /r` has no numeric Setting Value
+column, only localized text; `auditpol /backup /file:` has one (0 none, 1 Success, ...).
