@@ -19,7 +19,7 @@ first template lacked. That export does not vouch for filter `op: "In"`, a `LogN
 | The EventId filter and the technicalNotes table come from the same `events.py` | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | No placeholder survives the build; no `version`, `registryMetadata`, `integrationMetadata` or `originId` | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | Every key set (top level, `collectionAttrs`, filters, logFields, resourceMapping) matches the working export's, minus portal-owned keys | local (`tests/test_build.py`) | pass | 2026-11-13 |
-| `lm_lint_module.py dist`: 0 errors (1 expected WARN: shared checks only for LogSources) | local | pass | 2026-11-13 |
+| `lm_lint_module.py dist`: 0 errors (2 expected WARNs: shared checks only for LogSources; empty AppliesTo, opt-in) | local | pass | 2026-11-13 |
 | Import of the first template (no `searchKeywords`, `group`, filter/mapping `comment`) | portal import | refused, code 1500 | 2026-11-13 |
 | Candidates A and B (key set fixed, `appliesTo: false()`) | portal import | refused | 2026-11-13 |
 | A module built in the portal UI (a `Windows Event Logs` clone) exports and re-imports | portal import | pass | 2026-11-13 |
@@ -27,12 +27,13 @@ first template lacked. That export does not vouch for filter `op: "In"`, a `LogN
 | One change at a time from a clone's export: renamed, empty AppliesTo, no `originId`, no `version`, no `integrationMetadata` each import; no `registryMetadata` is refused, code 1500 | portal import | pass | 2026-11-13 |
 | From an editor-built LogSource: `registryMetadata` `{}`, blank `authorCompanyUuid`, fresh or blank ids each import as a new module; an existing module's `currentUuid` under a new name leaves that module alone | portal import | pass | 2026-11-13 |
 | This module (16 IDs, `In`, `LogName`, AND, `Static` field) with a full from-scratch `registryMetadata` imports | portal import | pass | 2026-11-13 |
-| This module as built (`registryMetadata` `{}`) imports | portal import | pending | |
-| `LogName` filter (`Equal` `Security`) survives | portal import | pending | |
-| `EventId` filter (`In`, 16 pipe-separated IDs) survives | portal import | pending | |
-| `Static` log field `ad_event_category` survives | portal import | pending | |
-| `resourceMapping` (`Token` `##system.deviceId##`, index `"0"`) survives | portal import | pending | |
-| Top-level key set unchanged by the round trip | portal import | pending | |
+| This module as built (`registryMetadata` `{}`) imports | portal import | pass | 2026-11-13 |
+| `LogName` filter (`Equal` `Security`) survives | portal import | pass | 2026-11-13 |
+| `EventId` filter (`In`, 16 pipe-separated IDs) survives | portal import | pass | 2026-11-13 |
+| `Static` log field `ad_event_category` survives | portal import | pass | 2026-11-13 |
+| `resourceMapping` (`Token` `##system.deviceId##`, index `"0"`) survives | portal import | pass | 2026-11-13 |
+| Top-level key set unchanged by the round trip | portal import | pass | 2026-11-13 |
+| Round trip: the export equals the build in every field except `version` (added) and `registryMetadata` (filled with the portal's own ids, `authorCompanyUuid` left blank) | portal import | pass | 2026-11-13 |
 | Group add/remove events reach LM Logs mapped to the DC, with `ad_event_category = group_management` | live target | pending | |
 
 ## Deferred
