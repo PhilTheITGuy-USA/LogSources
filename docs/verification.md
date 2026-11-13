@@ -6,15 +6,21 @@ real resource). This file is the one record of it. A clean lint is not a portal 
 
 ## `Microsoft_AD_GroupManagement_Events` (LogSource)
 
-The template's key set comes from the values the design spec recorded from LM's `Windows Event Logs`
-export. That export is not in this repo, so the portal round trip is what confirms the shape.
+The first round-trip import (2026-11-13) was refused: "Invalid File, cannot import into LogicModule",
+code 1500. That template's key set came from the spec's notes, not an export. The key set now
+matches a lab-portal export of a `Windows Event Logs` clone that imports: top-level
+`searchKeywords` and `group`, and a `comment` on every filter and `resourceMapping` entry, which the
+first template lacked. That export does not vouch for filter `op: "In"`, a `LogName` filter, the
+`Static` log-field method or `filterOp: "AND"`: only the round trip confirms those.
 
 | Claim | Layer | Result | Date |
 |---|---|---|---|
 | Exactly the 31 approved event IDs, no 4736, no overlap between the groups | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | The EventId filter and the technicalNotes table come from the same `events.py` | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | No placeholder survives the build; no `version`, `registryMetadata`, `integrationMetadata` or `originId` | local (`tests/test_build.py`) | pass | 2026-11-13 |
+| Every key set (top level, `collectionAttrs`, filters, logFields, resourceMapping) matches the working export's, minus portal-owned keys | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | `lm_lint_module.py dist`: 0 errors (1 expected WARN: shared checks only for LogSources) | local | pass | 2026-11-13 |
+| Import of the first template (no `searchKeywords`, `group`, filter/mapping `comment`) | portal import | refused, code 1500 | 2026-11-13 |
 | Import accepted without `originId` | portal import | pending | |
 | `LogName` filter (`Equal` `Security`) survives | portal import | pending | |
 | `EventId` filter (`In`, 31 pipe-separated IDs) survives | portal import | pending | |

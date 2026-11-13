@@ -79,7 +79,7 @@ class RenderLogSource(unittest.TestCase):
 
     def test_logname_filter(self):
         f = [x for x in self.out["filters"] if x["name"] == "LogName"]
-        self.assertEqual(f, [{"op": "Equal", "include": "y", "name": "LogName", "index": "1", "value": "Security"}])
+        self.assertEqual(f, [{"op": "Equal", "include": "y", "name": "LogName", "index": "1", "comment": "Security log only", "value": "Security"}])
 
     def test_technical_notes_hold_table(self):
         self.assertIn("4728", self.out["technicalNotes"])
@@ -98,6 +98,25 @@ class RenderLogSource(unittest.TestCase):
         self.assertEqual(o["appliesTo"], 'hasCategory("MicrosoftDomainController")')
         for k in ("version", "registryMetadata", "integrationMetadata", "originId"):
             self.assertNotIn(k, o)
+
+    def test_key_sets_match_a_working_export(self):
+        # Key sets of a lab-portal export of a Windows Event Logs clone that imports (2026-11-13),
+        # minus the portal-owned version, registryMetadata, integrationMetadata and originId.
+        # The first import, without searchKeywords, group and the filter/mapping comments,
+        # was refused with code 1500.
+        o = self.out
+        self.assertEqual(set(o), {
+            "name", "description", "appliesTo", "technicalNotes", "searchKeywords", "group",
+            "type", "collectionMethod", "collectionInterval", "collectionAttrs",
+            "filters", "logFields", "resourceMapping",
+        })
+        self.assertEqual(set(o["collectionAttrs"]), {"resourceMappingOp", "useWrittenTime", "filterOp"})
+        for f in o["filters"]:
+            self.assertEqual(set(f), {"op", "include", "name", "index", "comment", "value"})
+        for f in o["logFields"]:
+            self.assertEqual(set(f), {"method", "comment", "value", "key"})
+        for f in o["resourceMapping"]:
+            self.assertEqual(set(f), {"method", "index", "comment", "value", "key"})
 
     def test_template_without_placeholder_fails(self):
         t = copy.deepcopy(TEMPLATE)
