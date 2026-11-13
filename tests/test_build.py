@@ -95,7 +95,8 @@ class RenderLogSource(unittest.TestCase):
         o = self.out
         self.assertEqual((o["type"], o["collectionMethod"], o["collectionInterval"]), (10, "wineventlog", 60))
         self.assertEqual(o["collectionAttrs"], {"resourceMappingOp": "OR", "useWrittenTime": False, "filterOp": "AND"})
-        self.assertEqual(o["appliesTo"], 'hasCategory("MicrosoftDomainController")')
+        self.assertEqual(o["appliesTo"], "")  # empty: the user sets it (user, 2026-11-13)
+        self.assertIn('hasCategory("MicrosoftDomainController")', o["technicalNotes"])
         for k in ("version", "registryMetadata", "integrationMetadata", "originId"):
             self.assertNotIn(k, o)
 

@@ -21,7 +21,8 @@ python ../logicmonitor-modules-skill/skill/scripts/lm_lint_module.py dist
 ```
 
 Rebuild before linting: the lint reads `dist/`. It recurses and skips non-module JSON. A LogSource
-gets the shared checks only, plus one expected `WARN` that says so.
+gets the shared checks only, plus one expected `WARN` that says so, and a second for an empty
+AppliesTo: modules here ship it empty, opt-in, with what to set in technicalNotes (user, 2026-11-13).
 
 A set is a folder (`Microsoft_AD_GroupManagement/`) with `events.py` and JSON templates holding
 `@@EVENT_IDS@@` / `@@EVENT_TABLE@@`. Never edit `dist/`.

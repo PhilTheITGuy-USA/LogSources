@@ -21,6 +21,10 @@ first template lacked. That export does not vouch for filter `op: "In"`, a `LogN
 | Every key set (top level, `collectionAttrs`, filters, logFields, resourceMapping) matches the working export's, minus portal-owned keys | local (`tests/test_build.py`) | pass | 2026-11-13 |
 | `lm_lint_module.py dist`: 0 errors (1 expected WARN: shared checks only for LogSources) | local | pass | 2026-11-13 |
 | Import of the first template (no `searchKeywords`, `group`, filter/mapping `comment`) | portal import | refused, code 1500 | 2026-11-13 |
+| Candidates A and B (key set fixed, `appliesTo: false()`) | portal import | refused | 2026-11-13 |
+| A module built in the portal UI (a `Windows Event Logs` clone) exports and re-imports | portal import | pass | 2026-11-13 |
+| The UI offers `op` `In`, filter `LogName` and an AND/OR `filterOp` | portal UI | pass | 2026-11-13 |
+| Import accepted with an empty AppliesTo and no portal metadata | portal import | pending | |
 | Import accepted without `originId` | portal import | pending | |
 | `LogName` filter (`Equal` `Security`) survives | portal import | pending | |
 | `EventId` filter (`In`, 31 pipe-separated IDs) survives | portal import | pending | |

@@ -6,7 +6,7 @@ LogicMonitor LogSource modules, each importable as JSON into a LogicMonitor port
 
 | Module | Collects | Applies to |
 |---|---|---|
-| `Microsoft_AD_GroupManagement_Events` | The 31 Active Directory group-management Security events (security and distribution groups created, changed, deleted, members added or removed), tagged `ad_event_category=group_management` | `hasCategory("MicrosoftDomainController")` |
+| `Microsoft_AD_GroupManagement_Events` | The 31 Active Directory group-management Security events (security and distribution groups created, changed, deleted, members added or removed), tagged `ad_event_category=group_management` | Empty: set it after import, e.g. `hasCategory("MicrosoftDomainController")` |
 
 Prerequisites and the event list are in each module's technical notes. What each module has been
 verified against is in [docs/verification.md](docs/verification.md).
