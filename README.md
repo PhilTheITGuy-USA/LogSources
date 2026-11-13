@@ -17,5 +17,4 @@ verified against is in [docs/verification.md](docs/verification.md).
 2. In the portal, go to **Modules > My Module Toolbox > Add > From File** and pick the JSON from `dist/`.
 
 `Microsoft_AD_GroupManagement_Events` needs the domain controllers' advanced audit policy to log
-*Audit Security Group Management* successes, and the
-Collector's WMI account needs read access to the Security log.
+*Audit Security Group Management* successes, and the Collector's WMI account needs read access to the Security log.

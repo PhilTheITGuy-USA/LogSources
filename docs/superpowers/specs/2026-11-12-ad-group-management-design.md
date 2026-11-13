@@ -2,6 +2,15 @@
 
 Date: 2026-11-12. Status: design approved in conversation, awaiting spec review.
 
+> **Changed during implementation (2026-11-13).** What shipped differs from this design:
+> - Only the LogSource was built; the AuditPolicy DataSource is deferred (user).
+> - 16 security-group event IDs, not 31: the distribution-group IDs were dropped (user).
+> - AppliesTo ships empty, opt-in; the technical notes say what to set (user).
+> - The JSON shape below was a guess. The portal refused it until it carried `searchKeywords`,
+>   `group`, filter and mapping `comment`s and a `registryMetadata` block (`{}` is enough).
+>
+> The template, `events.py` and `docs/verification.md` are the current record.
+
 ## Goal
 
 Make sure Active Directory group-management events from every domain controller reach LM Logs,
